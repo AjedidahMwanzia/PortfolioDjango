@@ -84,7 +84,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=250)
     image = CloudinaryField("image")
     content = models.TextField()
-
+    hobbies= models.ForeignKey(Hobbies, on_delete=models.CASCADE,null=True)
     url = models.URLField(blank=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
