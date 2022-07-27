@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm, widgets
 # Create your models here.
 
-class Hobbies(models.Model):
+class Hobby(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name= models.CharField(max_length=250)
 
@@ -21,7 +21,7 @@ class Profile(models.Model):
     title=models.CharField(max_length=250)
     description = models.TextField()
     image=CloudinaryField('image')
-    hobbies = models.ForeignKey(Hobbies, on_delete=models.CASCADE)
+    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE)
 
     def save_profile(self):
         self.save()
@@ -33,7 +33,7 @@ class Profile(models.Model):
         return self.name
 
     
-class Projects(models.Model):
+class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     description = models.TextField()
@@ -84,7 +84,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=250)
     image = CloudinaryField("image")
     content = models.TextField()
-    hobbies= models.ForeignKey(Hobbies, on_delete=models.CASCADE,null=True)
+    hobby= models.ForeignKey(Hobby, on_delete=models.CASCADE,null=True)
     url = models.URLField(blank=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
