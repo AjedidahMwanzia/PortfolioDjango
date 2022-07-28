@@ -1,35 +1,31 @@
 from rest_framework import serializers
-from .models import Profile,Project,Blog,Hobby,Like,DisLike,Comment
+from .models import Profile,Project,Blog,Like,DisLike,Comment
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model Profile
+        model= Profile
         fields=('__all__')
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
-        model Project
+        model= Project
         fields=('__all__')
 
-class HobbySerializer(serializers.ModelSerializer):
-    class Meta:
-        model Hobby
-        fields=('__all__')
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model Profile
+        model= Profile
         fields=('__all__')
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model Like
+        model =Like
         fields=('name')
 
 
 class DisLikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model DisLike
+        model= DisLike
         fields=('name')
 
         

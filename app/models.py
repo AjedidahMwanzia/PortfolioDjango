@@ -6,22 +6,15 @@ from django.db.models.signals import post_save
 from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
 from django.forms import ModelForm, widgets
+from django import forms
 # Create your models here.
 
-class Hobby(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name= models.CharField(max_length=250)
-
-    def __str__(self):
-        return self.name
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name=models.CharField(max_length=250)
-    title=models.CharField(max_length=250)
-    description = models.TextField()
-    image=CloudinaryField('image')
-    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_photo = CloudinaryField("image")
+    bio = models.TextField(max_length=250, blank=True, null=True)
+    contact = models.CharField(max_length=250, blank=True, null=True)
 
     def save_profile(self):
         self.save()
@@ -29,8 +22,13 @@ class Profile(models.Model):
     def delete_profile(self):
         self.delete()
 
+    @classmethod
+    def filter_by_id(cls, id):
+        profile = Profile.objects.filter(user=id).first()
+        return profile
+
     def __str__(self):
-        return self.name
+        return self.user.username
 
     
 class Project(models.Model):
@@ -77,6 +75,14 @@ class Project(models.Model):
         return self.title
 
 
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment=models.TextField()
+    posted_on = models.DateTimeField(auto_now_add=True)
+    
+
+    def __str__(self):
+        return str(self.comment)
 
 
 class Blog(models.Model):
@@ -84,7 +90,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=250)
     image = CloudinaryField("image")
     content = models.TextField()
-    hobby= models.ForeignKey(Hobby, on_delete=models.CASCADE,null=True)
+    comment=models.ForeignKey(Comment, on_delete=models.CASCADE)
     url = models.URLField(blank=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -102,14 +108,6 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
-class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment=models.TextField()
-    posted_on = models.DateTimeField(auto_now_add=True)
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.comment)
 
 class Like(models.Model):
     comment=models.OneToOneField(Comment,related_name ='likes' ,on_delete=models.CASCADE)
@@ -124,4 +122,21 @@ class DisLike(models.Model):
 
     def __str__(self):
         return str(self.comment.comment)
+
+class UpdateProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ("user", "profile_photo", "bio", "contact")
+
+class ProjectForm(ModelForm):
+    class Meta:
+        model = Project
+        fields = ("user", "title", "description", "image", "url")
+
+
+class BlogForm(ModelForm):
+    class Meta:
+        model = Blog
+        fields = ("user", "title", "content", "image", "url")
+
 

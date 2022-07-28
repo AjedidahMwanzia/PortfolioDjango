@@ -4,7 +4,6 @@ from .models import *
 admin.site.register(Blog)
 admin.site.register(Project)
 admin.site.register(Profile)
-admin.site.register(Hobby)
 admin.site.register(Comment)
 admin.site.register(Like)
 admin.site.register(DisLike)
