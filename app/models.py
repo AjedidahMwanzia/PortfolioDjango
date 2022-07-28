@@ -74,23 +74,11 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-
-class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment=models.TextField()
-    posted_on = models.DateTimeField(auto_now_add=True)
-    
-
-    def __str__(self):
-        return str(self.comment)
-
-
 class Blog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     image = CloudinaryField("image")
     content = models.TextField()
-    comment=models.ForeignKey(Comment, on_delete=models.CASCADE)
     url = models.URLField(blank=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -107,6 +95,15 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment=models.TextField()
+    posted_on = models.DateTimeField(auto_now_add=True)
+    blog=models.ForeignKey(Blog, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.comment)
+
 
 
 class Like(models.Model):

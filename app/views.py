@@ -75,9 +75,55 @@ class ProfileList(APIView): # get all profiles
         serializers = ProfileSerializer(all_profiles, many=True)
         return Response(serializers.data)
 
-class ProjectList(APIView): # get all projects
+    def post(self, request, format=None):
+        serializers = ProfileSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProjectList(APIView): 
     permission_classes = (IsAdminOrReadOnly,)
     def get(self, request, format=None):
         all_projects = Project.objects.all()
         serializers = ProjectSerializer(all_projects, many=True)
         return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializers = ProjectSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class BlogList(APIView): 
+    permission_classes = (IsAdminOrReadOnly,)
+    def get(self, request, format=None):
+        all_blogs = Blog.objects.all()
+        serializers = BlogSerializer(all_bogs, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializers = BlogSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentList(APIView): 
+    permission_classes = (IsAdminOrReadOnly,)
+    def get(self, request, format=None):
+        all_comments = Comment.objects.all()
+        serializers = CommentSerializer(all_comments, many=True)
+        return Response(serializers.data)
+
+def post(self, request, format=None):
+        serializers = CommentSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
